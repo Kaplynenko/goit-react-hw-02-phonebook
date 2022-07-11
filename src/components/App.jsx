@@ -1,26 +1,59 @@
 import React, { Component } from 'react';
-import { nanoid } from 'nanoid';
-modele.id = nanoid();
+import Form from './Form/index';
+import ContactList from './ContactList';
+import Container from './Container';
+import SearchForm from './SearchForm';
+
+// const uId = nanoid();
+
 class App extends Component {
   state = {
     contacts: [],
-    name: '',
+    filter: '',
+  };
+
+  addContact = contact => {
+    this.setState(prevState => ({
+      contacts: [contact, ...prevState.contacts],
+    }));
+  };
+
+  changeFilter = e => {
+    this.setState({ filter: e.target.value });
+  };
+
+  getVisibleEl = () => {
+    const { filter, contacts } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+
+    return contacts.filter(e =>
+      e.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
+  deleteEl = elem => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(e => e.uId !== elem),
+    }));
   };
 
   render() {
+    const { contacts } = this.state;
+    const visibleEl = this.getVisibleEl();
+
     return (
-      <form>
-        <label>
-          <input
-            type="text"
-            name="name"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-          />
-        </label>
-      </form>
+      <div>
+        <Container>
+          <h1>Phonebook</h1>
+          <Form addContact={this.addContact} arrayContact={contacts} />
+
+          <h2>Contacts</h2>
+          <SearchForm onChange={this.changeFilter} />
+          <ContactList contactArrey={visibleEl} onDeleteEl={this.deleteEl} />
+        </Container>
+      </div>
     );
   }
 }
+
 export default App;
