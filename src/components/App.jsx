@@ -11,12 +11,26 @@ class App extends Component {
     contacts: [],
     filter: '',
   };
-
-  addContact = contact => {
-    this.setState(prevState => ({
-      contacts: [contact, ...prevState.contacts],
-    }));
-  };
+  componentDidUpdate(prevProps,prevState){
+    if(this.state.contacts !== prevState.contacts){
+    
+      localStorage.setItem('contacts',JSON.stringify(this.state.contacts))}
+  }
+  componentDidMount(){
+    const contacts =localStorage.getItem('contacts')
+    const parsedContacts = JSON.parse(contacts)
+    this.setState({contacts:parsedContacts})
+  }
+    addContact = contact => {
+      this.setState(prevState => ({
+        contacts: [contact, ...prevState.contacts],
+      }));
+    };
+  // addContact = contact => {
+  //   this.setState(prevState => ({
+  //     contacts: [contact, ...prevState.contacts],
+  //   }));
+  // };
 
   changeFilter = e => {
     this.setState({ filter: e.target.value });
