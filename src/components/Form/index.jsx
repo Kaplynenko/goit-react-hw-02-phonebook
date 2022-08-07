@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 
 class Form extends Component {
+  static propTypes = {
+    addContact: PropTypes.func.isRequired,
+    arrayContact: PropTypes.array.isRequired,
+  };
   state = {
     number: '',
     name: '',
@@ -66,8 +70,5 @@ class Form extends Component {
     );
   }
 }
-Form.propType = {
-  addContact: PropTypes.func.isRequired,
-  arrayContact: PropTypes.array.isRequired,
-};
+
 export default Form;
